@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main">
+
+     <insert id="insertMicro" parameterType="Map">
+         insert into microinfo(
+         microdata
+         ,userid
+         <if test="fileid !=null and fileid != ''">,fileid</if>) 
+         values(
+         #{microdata}
+         ,#{userid}
+         <if test="fileid !=null and fileid != ''">,#{fileid}</if>)
+     </insert>
+     
+     <insert id="zhuanFaMicro" parameterType="Map">
+         insert into microinfo(
+         microdata
+         ,userid
+         <if test="fileid !=null and fileid != ''">,fileid</if>
+         ,zhuanfaid) 
+         values(
+         #{microdata}
+         ,#{userid}
+         <if test="fileid !=null and fileid != ''">,#{fileid}</if>
+         ,#{zhuanfaid})
+     </insert>
+     
+     <select id="authorInfo" parameterType="String" resultType="Map">
+        select ui.userid,ui.username,ui.name
+        from microinfo mi left join userinfo ui on mi.userid=ui.userid 
+        where mi.microid=#{zhuanfaid}
+     </select>
+     
+     <select id="index" resultType="Map">
+         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu
+         ,ui.username,ui.name,fi.filepath filepath
+          from microinfo mi 
+          left join userinfo ui on mi.userid = ui.userid 
+          left join filetable fi on mi.fileid=fi.fileid
+          where 1=1
+     </select>
+     
+     <select id="self" resultType="Map">
+         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu
+         ,ui.username,ui.name,fi.filepath filepath
+          from microinfo mi 
+          left join userinfo ui on mi.userid = ui.userid 
+          left join filetable fi on mi.fileid=fi.fileid
+          where 1=1 and mi.zhuanfaid is null 
+     </select>
+     
+     <select id="image" resultType="Map">
+         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu
+         ,ui.username,ui.name,fi.filepath filepath
+          from microinfo mi 
+          left join userinfo ui on mi.userid = ui.userid 
+          left join filetable fi on mi.fileid=fi.fileid
+          where 1=1 and mi.fileid is not null
+     </select>
+     
+     <insert id="importFile" parameterType="Map">
+         insert into filetable(filepath,status) values(#{filepath},#{status})
+     </insert>
+     
+     <select id="selectFile" resultType="Map">
+         select * from filetable where status=0
+     </select>
+     
+     <update id="updateFile">
+         update filetable set status=1 where status=0
+     </update>
+     
+     <select id="selectMicro" resultType="Map" parameterType="Map">
+         select * from microinfo where microid=#{microid}
+     </select>
+     
+     <select id="selectUserZ" resultType="Map" parameterType="Map">
+        select dianzanid from userinfo where username=#{username}
+     </select>
+     
+     <update id="updateUserZ" parameterType="Map">
+        update userinfo set dianzanid=#{dianzanid} where username=#{username}
+     </update>
+     
+     <select id="selectMicroZ" parameterType="Map" resultType="Map">
+        select zanshu from microinfo where microid=#{microid}
+     </select>
+     
+     <update id="updateMicroZ" parameterType="Map">
+        update microinfo set zanshu=#{zanshu} where microid=#{microid}
+     </update>
+     
+     <delete id="deleteAllZan" parameterType="Map">
+        delete dianzanid from userinfo where username=#{username}
+     </delete>
+     
+     <select id="selectUserS" resultType="Map" parameterType="Map">
+        select shoucangid from userinfo where username=#{username}
+     </select>
+     
+     <select id="selectMicroS" parameterType="Map" resultType="Map">
+        select cangshu from microinfo where microid=#{microid}
+     </select>
+     
+     <update id="updateUserS" parameterType="Map">
+        update userinfo set shoucangid=#{shoucangid} where username=#{username}
+     </update>
+     
+     <update id="updateMicroS" parameterType="Map">
+        update microinfo set cangshu=#{cangshu} where microid=#{microid}
+     </update>
+</mapper>
