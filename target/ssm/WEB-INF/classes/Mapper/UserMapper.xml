@@ -21,4 +21,17 @@
         <if test="name != null and name != ''">,#{name}</if>
         <if test="address != null and address != ''">,#{address}</if>)
     </insert>
+    
+    <update id="updateGZ" parameterType="Map"> 
+        update userinfo set guanzhu=#{guanzhu} where username=#{username}
+    </update>
+    
+    <update id="updateUser" parameterType="Map">
+        update userinfo set password=#{password}
+        ,phone=#{phone}
+        ,sex=#{sex}
+        ,name=#{name}
+        ,address=#{address}
+        where username=#{username}
+    </update>
 </mapper>

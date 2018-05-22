@@ -29,6 +29,8 @@ $(function(){
 </script>
 </head>
 <body style="overflow-x: hidden; overflow-x: hidden">
+    <input type="hidden" id="userid" name="userid" value="${map.userid}">
+    <input type="hidden" id="password" name="password" value="${map.password}">
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-12 column">
@@ -44,7 +46,7 @@ $(function(){
 					<li id="image"><a href="#" onclick="image()">图片</a></li>
 					<li class="dropdown pull-right"><a href="#"
 						data-toggle="dropdown" class="dropdown-toggle"><span
-							class="glyphicon glyphicon-user"></span>${name}<strong
+							class="glyphicon glyphicon-user"></span>${map.name}<strong
 							class="caret"></strong></a>
 						<ul class="dropdown-menu">
 							<li><a href="#" onclick="out()">退出登录</a></li>
@@ -94,7 +96,7 @@ $(function(){
 					         <div class="col-md-12 column">
 					             <a href="#" style="font-size: 30px; color: #ff0055;" name="name_"><span class="glyphicon glyphicon-user"></span>赵宗峰</a>
 					             <h6 style="color: red;">来自    安安微博</h6>
-					             <p>我的微博</p>
+					             <p name="microdata">我的微博</p>
 					             <img alt="" src="" height="150px" width="300px">
 					         </div>
 					       
@@ -103,6 +105,29 @@ $(function(){
 					    <a href="#" name="shoucang" style="position:relative;left:15px;" onclick="shouCang(this)"><span class="glyphicon glyphicon-star-empty"></span>收藏</a>
 					    <a href="#" name="pinglun" style="position:relative;left:30px;" onclick="pingLun(this)"><span class="glyphicon glyphicon-sound-stereo"></span>评论</a>
 					    <a href="#" name="zhuanfa" style="position:relative;left:45px;" onclick="zhuanFaMicro(this)"><span class="glyphicon glyphicon-share"></span>转发</a>
+					    <div style="background:#cccccc;">
+					    <div class="form-group" style="display:none" name="pldiv">
+					         <input type="text" style="width:300px;float:left;" class="form-control" name="pldata"/>
+					         <a href="#" class="btn btn-default btn-sm" onclick="fbpl(this)" style="height:35px;width:60px;position:relative;left:20px;color:yellow;font-size:20px;"><span class="glyphicon glyphicon-ok"></span></a>
+				        </div>
+				        
+				        <div id="plmoban" name="plmoban" style="display:none;">
+				           <input type="hidden" name="plid">
+				           <input type="hidden" name="microid">
+				           <a href="#" name="user_" style="font-size: 15px;float:left; color: #ff0055;"><span class="glyphicon glyphicon-user"></span>赵宗峰：</a>
+				           <p name="hfppp" style="font-size: 15px;float:left;display:none">回复</p>
+				           <a href="#" name="user_2" style="display:none;float:left;"></a>
+				           <p style="font-size: 15px;" name="plinfo"></p>
+				           <a href="#" onclick="huifu(this)" style="position:relative;left:550px;">回复</a>
+				           <div class="form-group col-md-11 col-md-offset-1 column" style="display:none;position:relative;" name="pldiv_">
+					          <input type="text" style="width:450px;float:left;" class="form-control" name="pldata_"/>
+					          <a href="#" class="btn btn-default btn-sm" onclick="fbpl_(this)" style="height:35px;width:60px;position:relative;left:20px;color:yellow;font-size:20px;"><span class="glyphicon glyphicon-ok"></span></a>
+				           </div>
+				        </div>
+				        <div id="pls" name="pls">
+				             
+				        </div>
+				        </div>
 					</div>
 					<div id="microinfo">
 					
@@ -133,14 +158,14 @@ $(function(){
 							<div class="item active">
 								<img alt="" src="/ssm/image/0.jpg" />
 								<div class="carousel-caption">
-									<h4>${name}</h4>
+									<h4>${map.name}</h4>
 									<p>Welcome to An-An-microblag</p>
 								</div>
 							</div>
 							<div class="item">
 								<img alt="" src="/ssm/image/3.jpg" />
 								<div class="carousel-caption">
-									<h4>${name}</h4>
+									<h4>${map.name}</h4>
 									<p>Welcome to An-An-microblag</p>
 								</div>
 							</div>
@@ -155,16 +180,16 @@ $(function(){
 				</div>
 				<ul class="nav nav-tabs">
 				    <li>
-					    <a href="/ssm/main/usergz.action?username=${user.username}&name=${name}&password=${user.password}" >关注</a>
+					    <a href="/ssm/main/usergz.action?username=${user.username}&name=${map.name}&password=${user.password}" >关注</a>
 				    </li>
 				    <li>
-					    <a href="/ssm/main/userfs.action?username=${user.username}&name=${name}&password=${user.password}">粉丝</a>
+					    <a href="/ssm/main/userfs.action?username=${user.username}&name=${map.name}&password=${user.password}">粉丝</a>
 				    </li>
 				    <li>
-					    <a href="/ssm/main/userm.action?username=${user.username}&name=${name}&password=${user.password}">微博</a>
+					    <a href="/ssm/main/userm.action?username=${user.username}&name=${map.name}&password=${user.password}">微博</a>
 				    </li>
 				    <li>
-					    <a href="/ssm/main/usersc.action?username=${user.username}&name=${name}&password=${user.password}">收藏</a>
+					    <a href="/ssm/main/usersc.action?username=${user.username}&name=${map.name}&password=${user.password}">收藏</a>
 				    </li>
 			    </ul>
 			</div>

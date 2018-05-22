@@ -58,6 +58,7 @@ public class UserController extends Action{
         } else {
             session.setAttribute("user", param);
             session.setAttribute("name", map.get("name"));
+            session.setAttribute("map", map);
             ModelAndView mav = new ModelAndView();
             mav.setViewName("main");
             return mav;
@@ -76,6 +77,20 @@ public class UserController extends Action{
     public Map<String,Object> insertUser(HttpServletRequest request) {
         Map<String,Object> map = _getParameters(request);
         int i = userService.insertUser(map);
+        if (i>0) {
+        	map.put("flag", true);
+            return map;
+        } else {
+            map.put("flag", false);
+            return map;
+        }
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/updateUser.action", method = RequestMethod.GET)
+    public Map<String,Object> updateUser(HttpServletRequest request) {
+        Map<String,Object> map = _getParameters(request);
+        int i = userService.updateUser(map);
         if (i>0) {
         	map.put("flag", true);
             return map;

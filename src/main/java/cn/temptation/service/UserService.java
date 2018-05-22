@@ -13,5 +13,13 @@ public class UserService {
 	public int insertUser(Map<String,Object> map) {
 		return dao.insert("user.insertUser", map);
 	}
+	
+	public int updateGZ(Map<String,Object> param) {
+		return dao.update("user.updateGZ", param);
+	}
+	
+	public int updateUser(Map<String,Object> param) {
+		return dao.update("user.updateUser", param);
+	}
 
 }

@@ -6,6 +6,10 @@
         select userid,username,name,phone,sex from userinfo where FIND_IN_SET(userid,(select guanzhu from userinfo where username=#{username}))
     </select>
     
+    <select id="myfensi" parameterType="Map" resultType="Map">
+        select userid,username,name,phone,sex from userinfo where FIND_IN_SET(#{userid},guanzhu)
+    </select>
+    
     <select id="rmmicro" resultType="Map">
         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu
          ,ui.username,ui.name,fi.filepath filepath
@@ -31,5 +35,16 @@
           left join userinfo ui on mi.userid = ui.userid 
           left join filetable fi on mi.fileid=fi.fileid
           WHERE FIND_IN_SET(microid,(SELECT shoucangid from userinfo WHERE username=#{username}))
+    </select>
+    
+    <select id="SearchUser" resultType="Map" parameterType="Map">
+          select userid,username,name,phone,sex from userinfo ui
+          where <if test="searchby != null and searchby != ''">ui.username like '%${searchby}%'</if>
+          <if test="searchby != null and searchby != ''">or ui.name like '%${searchby}%'</if>
+          <if test="searchby != null and searchby != ''">or ui.phone like '%${searchby}%'</if>
+    </select>
+    
+    <select id="count_" resultType="Map" parameterType="Map">
+          select FIND_IN_SET(#{userid},(select guanzhu from userinfo where username=#{uning})) count_
     </select>
 </mapper>

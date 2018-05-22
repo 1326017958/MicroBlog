@@ -85,5 +85,21 @@ public class MainService {
 	public int updateMicroS(Map<String,Object> param) {
 		return dao.update("main.updateMicroS", param);
 	}
+	//发表评论
+	public int insertPl(Map<String,Object> param) {
+		return dao.insert("main.insertPl", param);
+	}
+	//查询一级评论
+	public List<Map<String,Object>> pingLun(Map<String,Object> param){
+		return dao.select("main.pingLun",param);
+	}
+	//查询二级评论
+	public List<Map<String,Object>> huiFu(Map<String,Object> param){
+		return dao.select("main.huiFu",param);
+	}
+	//查询评论用户信息
+	public Map<String,Object> plid_2UInfo(String plid_2){
+		return dao.selectOne("main.plid_2UInfo",plid_2);
+	}
 	
 }

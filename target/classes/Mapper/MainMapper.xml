@@ -7,11 +7,13 @@
          insert into microinfo(
          microdata
          ,userid
-         <if test="fileid !=null and fileid != ''">,fileid</if>) 
+         <if test="fileid !=null and fileid != ''">,fileid</if>
+         ,fbdate) 
          values(
          #{microdata}
          ,#{userid}
-         <if test="fileid !=null and fileid != ''">,#{fileid}</if>)
+         <if test="fileid !=null and fileid != ''">,#{fileid}</if>
+         ,LOCALTIME)
      </insert>
      
      <insert id="zhuanFaMicro" parameterType="Map">
@@ -19,12 +21,14 @@
          microdata
          ,userid
          <if test="fileid !=null and fileid != ''">,fileid</if>
-         ,zhuanfaid) 
+         ,zhuanfaid
+         ,fbdate) 
          values(
          #{microdata}
          ,#{userid}
          <if test="fileid !=null and fileid != ''">,#{fileid}</if>
-         ,#{zhuanfaid})
+         ,#{zhuanfaid}
+         ,LOCALTIME)
      </insert>
      
      <select id="authorInfo" parameterType="String" resultType="Map">
@@ -34,8 +38,8 @@
      </select>
      
      <select id="index" resultType="Map">
-         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu
-         ,ui.username,ui.name,fi.filepath filepath
+         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu,mi.fbdate
+         ,ui.username,ui.name,fi.filepath filepath,(SELECT COUNT(1) from plinfo pi where pi.microid=mi.microid) plshu
           from microinfo mi 
           left join userinfo ui on mi.userid = ui.userid 
           left join filetable fi on mi.fileid=fi.fileid
@@ -43,8 +47,8 @@
      </select>
      
      <select id="self" resultType="Map">
-         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu
-         ,ui.username,ui.name,fi.filepath filepath
+         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu,mi.fbdate
+         ,ui.username,ui.name,fi.filepath filepath,(SELECT COUNT(1) from plinfo pi where pi.microid=mi.microid) plshu
           from microinfo mi 
           left join userinfo ui on mi.userid = ui.userid 
           left join filetable fi on mi.fileid=fi.fileid
@@ -52,8 +56,8 @@
      </select>
      
      <select id="image" resultType="Map">
-         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu
-         ,ui.username,ui.name,fi.filepath filepath
+         select mi.microid,mi.microdata,mi.userid,mi.fileid,mi.zhuanfaid,mi.zanshu,mi.cangshu,mi.fbdate
+         ,ui.username,ui.name,fi.filepath filepath,(SELECT COUNT(1) from plinfo pi where pi.microid=mi.microid) plshu
           from microinfo mi 
           left join userinfo ui on mi.userid = ui.userid 
           left join filetable fi on mi.fileid=fi.fileid
@@ -111,4 +115,34 @@
      <update id="updateMicroS" parameterType="Map">
         update microinfo set cangshu=#{cangshu} where microid=#{microid}
      </update>
+     
+     <insert id="insertPl" parameterType="Map">
+        insert into plinfo(
+        pldata
+        ,microid
+        ,userid
+        <if test="plid_ != null and plid_ != ''">,plid_</if>
+        <if test="plid_ != null and plid_ != ''">,plid_2</if>
+        ,pldate)
+        values(
+        #{pldata}
+        ,#{microid}
+        ,#{userid}
+        <if test="plid_ != null and plid_ != ''">,#{plid_}</if>
+        <if test="plid_ != null and plid_ != ''">,#{plid_2}</if>
+        ,LOCALTIME)
+     </insert>
+     
+     <select id="pingLun" parameterType="Map" resultType="Map">
+        select pi.plid,pi.pldata,pi.microid,pi.plid_,pi.userid,pi.pldate,pi.plid_2,
+        ui.username,ui.name,ui.password,ui.sex,ui.phone from plinfo pi 
+        left join userinfo ui on pi.userid=ui.userid
+         where microid=#{microid}
+     </select>
+     
+     
+     <select id="plid_2UInfo" parameterType="String" resultType="Map">
+        select ui.userid userid_,ui.username username_,ui.name name_ from plinfo pi
+        left join userinfo ui on pi.userid=ui.userid where pi.plid=#{plid_}
+     </select>
 </mapper>

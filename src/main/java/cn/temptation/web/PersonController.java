@@ -1,5 +1,6 @@
 package cn.temptation.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,27 @@ public class PersonController extends Action {
 		List<Map<String,Object>> list = personService.guanzhu(param);
 		PageInfo page = new PageInfo<>(list,6);
 		return page;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/myfensi.action", method = RequestMethod.GET)
+	public List<Map<String,Object>> myfensi(HttpServletRequest request) {
+		Map<String,Object> param = _getParameters(request);
+		List<Map<String,Object>> list = personService.myfensi(param);
+		for(int i=0;i<list.size();i++) {
+			list.get(i).put("uning", param.get("username"));
+			Map<String,Object> count_ = personService.count_(list.get(i));
+			if(count_==null) {
+				list.get(i).put("flag", false);
+			}else {
+				if(count_.get("count_").toString().equals("0")) {
+					list.get(i).put("flag", false);
+				}else {
+					list.get(i).put("flag", true);
+				}
+			}
+		}
+		return list;
 	}
 	
 	@ResponseBody
@@ -114,6 +136,96 @@ public class PersonController extends Action {
 			}
 		}
 		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/SearchUser.action", method = RequestMethod.GET)
+	public List<Map<String,Object>> SearchUser(HttpServletRequest request) {
+		Map<String,Object> param = _getParameters(request);
+		List<Map<String,Object>> list = personService.SearchUser(param);
+		for(int i=0;i<list.size();i++) {
+			list.get(i).put("uning", param.get("username"));
+			Map<String,Object> count_ = personService.count_(list.get(i));
+			if(count_==null) {
+				list.get(i).put("flag", false);
+			}else {
+				if(count_.get("count_").toString().equals("0")) {
+					list.get(i).put("flag", false);
+				}else {
+					list.get(i).put("flag", true);
+				}
+			}
+		}
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/newGZ.action", method = RequestMethod.GET)
+	public Map<String,Object> newGZ(HttpServletRequest request) {
+		Map<String,Object> param = _getParameters(request);
+		Map<String,Object> m = new HashMap<>();
+		Map<String,Object> p = userService.findByUsername(param.get("username").toString());
+		StringBuffer stb = new StringBuffer();
+		m.put("flag", true);
+		int j=0;
+		if(p.get("userid").toString().equals(param.get("_userid").toString())) {
+			m.put("flag", false);
+		}else if(p.containsKey("guanzhu")) {
+			String [] a = p.get("guanzhu").toString().split(",");
+			for(int i=0;i<a.length;i++) {
+				if(param.get("_userid").toString().equals(a[i])) {
+					m.put("flag", false);
+				}
+			}
+			if((boolean) m.get("flag")) {
+				stb.append(p.get("guanzhu").toString());
+				stb.append(param.get("_userid").toString());
+				stb.append(",");
+				param.put("guanzhu", stb.toString());
+				j = userService.updateGZ(param);
+			}
+		}else {
+			stb.append(param.get("_userid").toString());
+			stb.append(",");
+			param.put("guanzhu", stb.toString());
+			j = userService.updateGZ(param);
+		}
+		if(j>0) {
+			m.put("flag", true);
+		}else {
+			m.put("flag", false);
+		}
+		return m;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteGZ.action", method = RequestMethod.GET)
+	public Map<String,Object> deleteGZ(HttpServletRequest request) {
+		Map<String,Object> param = _getParameters(request);
+		Map<String,Object> m = new HashMap<>();
+		Map<String,Object> p = userService.findByUsername(param.get("username").toString());
+		StringBuffer stb = new StringBuffer();
+		m.put("flag", true);
+		int j=0;
+		if(p.containsKey("guanzhu")) {
+			String [] a = p.get("guanzhu").toString().split(",");
+			for(int i=0;i<a.length;i++) {
+				if(!param.get("_userid").toString().equals(a[i])) {
+					stb.append(a[i]);
+					stb.append(",");
+				}
+			}
+			param.put("guanzhu", stb.toString());
+			j = userService.updateGZ(param);
+		}else {
+			
+		}
+		if(j>0) {
+			m.put("flag", true);
+		}else {
+			m.put("flag", false);
+		}
+		return m;
 	}
 
 }

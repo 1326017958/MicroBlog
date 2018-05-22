@@ -34,9 +34,10 @@ $(function(){
 	<div class="container">
 	    <input type="hidden" id="fenlei1" name="fenlei1" value="${fenlei1}">
 	    <input type="hidden" id="fenlei2" name="fenlei2" value="${fenlei2}">
-	    <input type="hidden" id="username" name="username" value="${username}">
-	    <input type="hidden" id="name_" name="name_" value="${name}">
-	    <input type="hidden" id="password" name="password" value="${password}">
+	    <input type="hidden" id="username" name="username" value="${map.username}">
+	    <input type="hidden" id="name_" name="name_" value="${map.name}">
+	    <input type="hidden" id="userid" name="userid" value="${map.userid}">
+	    <input type="hidden" id="password" name="password" value="${map.password}">
 	    <input type="hidden" id="gzpn" name="gzpn">
 	    <input type="hidden" id="pnsize" name="pnsize">
 		<div class="row clearfix">
@@ -98,17 +99,17 @@ $(function(){
 					</ul>
 					<form class="navbar-form navbar-left" role="search">
 						<div class="form-group">
-							<input type="text" class="form-control" />
+							<input type="text" class="form-control" id="searchby"/>
 						</div>
-						<button type="submit" class="btn btn-default">
+						<a href="#" class="btn btn-default" onclick="SearchUser()">
 							<span class="glyphicon glyphicon-search"
 								style="color: rgb(255, 140, 60);"> 搜索</span>
-						</button>
+						</a>
 					</form>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown pull-right"><a href="#"
 						data-toggle="dropdown" class="dropdown-toggle"><span
-							class="glyphicon glyphicon-user"></span>${name}<strong
+							class="glyphicon glyphicon-user"></span>${map.name}<strong
 							class="caret"></strong></a>
 						<ul class="dropdown-menu">
 						    <li><a href="#" onclick="register()">注册</a></li>
@@ -153,26 +154,92 @@ $(function(){
 						</ul>
 					</div>
 				</div>
+				<div class="row clearfix" id="mysearch" style="display:none;">
+					<div class="col-md-12 column">
+						<ul class="nav nav-tabs">
+							
+							<li class="active" ><a href="#" onclick="">搜索用户</a></li>
+						</ul>
+					</div>
+				</div>
 
                 <div class="row clearfix">
                 <br>
-					<div
-						style="border: 1px solid yellow; width: 250px; display: none; float: left;"
-						id="guanzhu">
-						<a href="#" style="font-size: 30px; color: #ff0055;" name="name"><span
-							class="glyphicon glyphicon-user"></span>赵宗峰</a>
-						<p>
-							<span class="glyphicon glyphicon-ok"></span>已关注
-						</p>
+					<div style="border: 1px solid yellow; width: 250px; display: none; float: left;" id="guanzhu">
+					    <input type="hidden" name="_userid">
+						<a href="#" style="font-size: 30px; color: #ff0055;" name="name"><span class="glyphicon glyphicon-user"></span>赵宗峰</a>
+						<p><span class="glyphicon glyphicon-ok"></span>已关注</p>
 						<h6 style="color: red;">通过安安关注</h6>
-						<a href="#"><span class="glyphicon glyphicon-minus"
-							style="color: yellow;" name="deleteGZ" onclick="deleteGZ()"></span>取消关注</a>
+						<a href="#" onclick="deleteGZ(this)"><span class="glyphicon glyphicon-minus-sign" style="color: yellow;" name="deleteGZ"></span>取消关注</a>
 					</div>
 					<div class="col-md-11 col-md-offset-1 column" id="pagenation"
 						style="display: none;">
 						<ul class="pagination">
 						</ul>
 					</div>
+					<div style="border: 1px solid yellow; width: 250px; display: none; float: left;" id="UserP">
+					    <input type="hidden" name="_userid">
+						<a href="#" style="font-size: 30px; color: #ff0055;" name="name"><span class="glyphicon glyphicon-user"></span>赵宗峰</a>
+						<p><span class="glyphicon glyphicon-ok"></span>已关注</p>
+						<a href="#" name="dGZ" onclick="deleteGZ(this)" style="display: none;"><span class="glyphicon glyphicon-minus-sign" style="color: yellow;" name="deleteGZ"></span>取消关注</a>
+						<a href="#" name="nGZ" onclick="newGZ(this)" style="display: none;"><span class="glyphicon glyphicon-plus-sign" style="color: yellow;" name="deleteGZ"></span>添加关注</a>
+					</div>
+					<div style="border: 1px solid yellow; width: 250px; display: none; float: left;" id="fensi">
+					    <input type="hidden" name="_userid">
+						<a href="#" style="font-size: 30px; color: #ff0055;" name="name"><span class="glyphicon glyphicon-user"></span>赵宗峰</a>
+						<p><span class="glyphicon glyphicon-ok"></span>已关注</p>
+						<h6 style="color: red;">通过安安关注</h6>
+						<a href="#" name="dGZ" onclick="deleteGZ(this)" style="display: none;"><span class="glyphicon glyphicon-minus-sign" style="color: yellow;" name="deleteGZ"></span>取消关注</a>
+						<a href="#" name="nGZ" onclick="newGZ(this)" style="display: none;"><span class="glyphicon glyphicon-plus-sign" style="color: yellow;" name="deleteGZ"></span>添加关注</a>
+					</div>
+					<div id="UserInfo" style="display: none;">
+							<table class="table">
+								<thead>
+									<tr class="success">
+										<th>用户属性</th>
+										<th>用户值</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="info">
+										<td>用户名</td>
+										<td><input type="text" id="username_1" name="username_1" value="${map.username}" readonly style="background-color:#CCCCCC"></td>
+									</tr>
+									<tr class="success">
+										<td>用户密码</td>
+										<td><input id="password_1" name="password_1" value="${map.password}"></td>
+									</tr>
+									<tr class="info">
+										<td>联系方式</td>
+										<td><input id="phone_1" name="phone_1" value="${map.phone}"></td>
+									</tr>
+									<tr class="warning">
+									    
+										<td>用户性别<input type="hidden" id="sex_" name="sex_" value="${map.sex}"></td>
+										<td><select id="sex_1" name="sex_1"
+											style="width: 174px; height: 27px;">
+												<option value="0">男</option>
+												<option value="1">女</option>
+										</select></td>
+									</tr>
+									<tr class="info">
+										<td>用户昵称</td>
+										<td><input id="name_1" name="name_1" value="${map.name}"></td>
+									</tr>
+									<tr class="warning">
+										<td>用户地址</td>
+										<td><input id="address_1" name="address_1" value="${map.address}"></td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr class="success">
+										<td><a href="#" class="btn btn-default"
+											onclick="updateUser()">保存修改</a></td>
+										<td></td>
+									</tr>
+								</tfoot>
+							</table>
+				    </div>
 					<div class="col-md-12 column" id="zhuye">
 					</div>
 				</div>

@@ -61,3 +61,25 @@ function clUser(){
 	$("#name").val("");
 	$("#address").val("");
 }
+
+function updateUser(){
+	var data_ = "username="+$("#username_1").val();
+	data_ += "&password="+$("#password_1").val();
+	data_ += "&phone="+$("#phone_1").val();
+	data_ += "&sex="+$("#sex_1").val();
+	data_ += "&name="+$("#name_1").val();
+	data_ += "&address="+$("#address_1").val();
+	$.ajax({
+		url:"/ssm/user/updateUser.action",
+		data:data_,
+		dataType:"json",
+		success:function(param){
+			if(param.flag){
+				alert("修改成功");
+			}else{
+				alert("修改失败");
+			}
+		}
+	})
+}
+

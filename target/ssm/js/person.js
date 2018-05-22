@@ -8,9 +8,10 @@ function pages(pn){
 		success:function(param){
 			var a;
 			for(var i in param.list){
-				a = i*10
+				a = i*10;
 				var json = param.list[i];
 				var guanzhu = $("#guanzhu").clone();
+				guanzhu.find('input[name="_userid"]').val(json.userid);
 				guanzhu.find('a[name="name"]').html("<span class='glyphicon glyphicon-user'></span>"+json.name);
 				if(i%2==0){
 					guanzhu.css({
@@ -165,6 +166,9 @@ function mymicro(){
 	$("#mymicro").css({
 		"display":"block",
 	});
+	$("#mysearch").css({
+		"display":"none",
+	});
 	$("#2222").attr("class","active");
 	$("#1111").removeClass();
 	$("#3333").removeClass();
@@ -243,10 +247,25 @@ function myziliao(){
 	$("#mymicro").css({
 		"display":"none",
 	});
+	$("#mysearch").css({
+		"display":"none",
+	});
 	$("#3333").attr("class","active");
 	$("#1111").removeClass();
 	$("#2222").removeClass();
 	$("#zhuye").empty();
+	var userinfo = $("#UserInfo");
+	userinfo.css({
+		"display":"block",
+	});
+	var sex = userinfo.find('select[name="sex_1"] option');
+	var sex_ = userinfo.find('input[name="sex_"]').val();
+	for(var i in sex){
+		if(sex_==sex[i].value){
+			sex[i].selected = true;
+		}
+	}
+	$("#zhuye").append(userinfo);
 }
 
 function mymain(param){
@@ -257,6 +276,9 @@ function mymain(param){
 		"display":"none",
 	});
 	$("#mymicro").css({
+		"display":"none",
+	});
+	$("#mysearch").css({
 		"display":"none",
 	});
 	$("#1111").attr("class","active");
@@ -284,6 +306,46 @@ function myfensi(){
 	$("#myguanzhu").removeClass();
 	$("#myshoucang").removeClass();
 	$("#zhuye").empty();
+	$.ajax({
+		url:"/ssm/person/myfensi.action",
+		data:"userid="+$("#userid").val()+"&username="+$("#username").val(),
+		dataType:"json",
+		success:function(param){
+			var a;
+			for(var i in param){
+				a = i*10;
+				var json = param[i];
+				var fensi = $("#fensi").clone();
+				fensi.find('a[name="name"]').html("<span class='glyphicon glyphicon-user'></span>"+json.name);
+				fensi.find('input[name="_userid"]').val(json.userid);
+				if(json.flag){
+					fensi.find('a[name="dGZ"]').css({
+						"display":"block",
+					});
+				}else{
+					fensi.find('a[name="nGZ"]').css({
+						"display":"block",
+					});
+					fensi.find('p').html("<span class='glyphicon glyphicon-remove'></span>未关注")
+				}
+				if(i%2==0){
+					fensi.css({
+						"position":"relative",
+						"top":a+"px",
+						"display":"block",
+					});
+				}else{
+					fensi.css({
+						"position":"relative",
+						"top":a-10+"px",
+					    "left":"30px",
+						"display":"block",
+					});
+				}
+				$("#zhuye").append(fensi);
+			}
+		}
+	});
 }
 
 function myshoucang(){
@@ -356,4 +418,101 @@ function myshoucang(){
 
 function returnindex(){
 	window.location.href="/ssm/user/login.action?username="+$("#username").val()+"&password="+$("#password").val()+"&fenlei=index";
+}
+
+function SearchUser(){
+	if($("#searchby").val()==""){
+		alert("搜索框为空！！！");
+		return;
+	}
+	$("#zhuye").empty();
+	$("#mymain").css({
+		"display":"none",
+	});
+	$("#myziliao").css({
+		"display":"none",
+	});
+	$("#mymicro").css({
+		"display":"none",
+	});
+	$("#mysearch").css({
+		"display":"block",
+	});
+	$.ajax({
+		url:"/ssm/person/SearchUser.action",
+		data:"searchby="+$("#searchby").val()+"&username="+$("#username").val(),
+		dataType:"json",
+		success:function(param){
+			var a;
+			for(var i in param){
+				a = i*10;
+				var json = param[i];
+				var userp = $("#UserP").clone();
+				userp.find('a[name="name"]').html("<span class='glyphicon glyphicon-user'></span>"+json.name);
+				userp.find('input[name="_userid"]').val(json.userid);
+				if(json.flag){
+					userp.find('a[name="dGZ"]').css({
+						"display":"block",
+					});
+				}else{
+					userp.find('a[name="nGZ"]').css({
+						"display":"block",
+					});
+					userp.find('p').html("<span class='glyphicon glyphicon-remove'></span>未关注")
+				}
+				if(i%2==0){
+					userp.css({
+						"position":"relative",
+						"top":a+"px",
+						"display":"block",
+					});
+				}else{
+					userp.css({
+						"position":"relative",
+						"top":a-10+"px",
+					    "left":"30px",
+						"display":"block",
+					});
+				}
+				$("#zhuye").append(userp);
+			}
+		}
+	});
+	
+}
+
+function newGZ(infoss){
+	var userp = $(infoss).parent();
+	var _userid = userp.find('input[name=_userid]').val()
+	var username = $("#username").val();
+	$.ajax({
+		url:"/ssm/person/newGZ.action",
+		data:"username="+username+"&_userid="+_userid,
+		dataType:"json",
+		success:function(param){
+			if(param.flag){
+				alert("添加关注成功");
+			}else{
+				alert("添加关注失败");
+			}
+		}
+	});
+}
+
+function deleteGZ(infoss){
+	var userp = $(infoss).parent();
+	var _userid = userp.find('input[name=_userid]').val()
+	var username = $("#username").val();
+	$.ajax({
+		url:"/ssm/person/deleteGZ.action",
+		data:"username="+username+"&_userid="+_userid,
+		dataType:"json",
+		success:function(param){
+			if(param.flag){
+				alert("取消关注成功");
+			}else{
+				alert("取消关注失败");
+			}
+		}
+	});
 }

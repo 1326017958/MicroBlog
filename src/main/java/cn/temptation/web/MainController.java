@@ -405,9 +405,8 @@ public class MainController extends Action {
 	@RequestMapping(value = "/usergz.action", method = RequestMethod.GET)
 	public ModelAndView usergz(HttpServletRequest request,HttpSession session){
 		Map<String,Object> param = _getParameters(request);
-		session.setAttribute("username", param.get("username"));
-		session.setAttribute("name", param.get("name"));
-		session.setAttribute("password", param.get("password"));
+		Map<String,Object> map = userService.findByUsername(param.get("username").toString());
+		session.setAttribute("map", map);
 		ModelAndView mav =new ModelAndView();
 		session.setAttribute("fenlei1", "mymain");
 		session.setAttribute("fenlei2", "guanzhu");
@@ -419,9 +418,8 @@ public class MainController extends Action {
 	@RequestMapping(value = "/userfs.action", method = RequestMethod.GET)
 	public ModelAndView userfs(HttpServletRequest request,HttpSession session){
 		Map<String,Object> param = _getParameters(request);
-		session.setAttribute("username", param.get("username"));
-		session.setAttribute("name", param.get("name"));
-		session.setAttribute("password", param.get("password"));
+		Map<String,Object> map = userService.findByUsername(param.get("username").toString());
+		session.setAttribute("map", map);
 		ModelAndView mav =new ModelAndView();
 		session.setAttribute("fenlei1", "mymain");
 		session.setAttribute("fenlei2", "fensi");
@@ -433,9 +431,8 @@ public class MainController extends Action {
 	@RequestMapping(value = "/usersc.action", method = RequestMethod.GET)
 	public ModelAndView usersc(HttpServletRequest request,HttpSession session){
 		Map<String,Object> param = _getParameters(request);
-		session.setAttribute("username", param.get("username"));
-		session.setAttribute("name", param.get("name"));
-		session.setAttribute("password", param.get("password"));
+		Map<String,Object> map = userService.findByUsername(param.get("username").toString());
+		session.setAttribute("map", map);
 		ModelAndView mav =new ModelAndView();
 		session.setAttribute("fenlei1", "mymain");
 		session.setAttribute("fenlei2", "shoucang");
@@ -447,9 +444,8 @@ public class MainController extends Action {
 	@RequestMapping(value = "/userm.action", method = RequestMethod.GET)
 	public ModelAndView userm(HttpServletRequest request,HttpSession session){
 		Map<String,Object> param = _getParameters(request);
-		session.setAttribute("username", param.get("username"));
-		session.setAttribute("name", param.get("name"));
-		session.setAttribute("password", param.get("password"));
+		Map<String,Object> map = userService.findByUsername(param.get("username").toString());
+		session.setAttribute("map", map);
 		ModelAndView mav =new ModelAndView();
 		session.setAttribute("fenlei1", "mymicro");
 		session.setAttribute("fenlei2", "");
@@ -461,9 +457,8 @@ public class MainController extends Action {
 	@RequestMapping(value = "/userzl.action", method = RequestMethod.POST)
 	public ModelAndView userzl(HttpServletRequest request,HttpSession session){
 		Map<String,Object> param = _getParameters(request);
-		session.setAttribute("username", param.get("username"));
-		session.setAttribute("name", param.get("name"));
-		session.setAttribute("password", param.get("password"));
+		Map<String,Object> map = userService.findByUsername(param.get("username").toString());
+		session.setAttribute("map", map);
 		ModelAndView mav =new ModelAndView();
 		session.setAttribute("fenlei", "myziliao");
 		session.setAttribute("fenlei_", "");
@@ -471,6 +466,37 @@ public class MainController extends Action {
 		return mav;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/fbpl.action", method = RequestMethod.GET)
+	public Map<String,Object> fbpl(HttpServletRequest request,HttpSession session){
+		Map<String,Object> param = _getParameters(request);
+		int i = mainService.insertPl(param);
+		if(i>0) {
+			param.put("flag", true);
+		}else {
+			param.put("flag", false);
+		}
+		return param;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/pingLun.action", method = RequestMethod.GET)
+	public List<Map<String,Object>> pingLun(HttpServletRequest request,HttpSession session){
+		Map<String,Object> param = _getParameters(request);
+		List<Map<String,Object>> list = mainService.pingLun(param);
+		for(int i=0; i<list.size();i++) {
+			if(list.get(i).containsKey("plid_")) {
+				list.get(i).put("flag", false);
+				Map<String,Object> m = mainService.plid_2UInfo(list.get(i).get("plid_").toString());
+				list.get(i).put("userid_", m.get("userid_"));
+				list.get(i).put("username_", m.get("username_"));
+				list.get(i).put("name_", m.get("name_"));
+			}else {
+				list.get(i).put("flag", true);
+			}
+		}
+		return list;
+	}
 	
 
 }

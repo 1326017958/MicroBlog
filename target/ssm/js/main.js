@@ -59,10 +59,11 @@ function index(){
 				var micro = $("#moban").clone();
 				micro.find('a[name="name_"]').html("<span class='glyphicon glyphicon-user'></span>"+json.name);
 				if(json.authorname!=undefined){
-					micro.find("h6").html("转发微博");
-					micro.find("p").html(json.authorname+":"+json.microdata);
+					micro.find("h6").html(json.fbdate+"转发微博");
+					micro.find('p[name="microdata"]').html(json.authorname+":"+json.microdata);
 				}else{
-					micro.find("p").html(json.microdata);
+					micro.find("h6").html(json.fbdate+"来自 安安微博");
+					micro.find('p[name="microdata"]').html(json.microdata);
 				}
 				if(json.zanshu==undefined||json.zanshu==0){
 				}else{
@@ -78,6 +79,8 @@ function index(){
 						}else{
 							micro.find('a[name="dianzan"]').html("<span class='glyphicon glyphicon-thumbs-up'></span>&nbsp;&nbsp;"+json.zanshu);
 						}
+					}else{
+						micro.find('a[name="dianzan"]').html("<span class='glyphicon glyphicon-thumbs-up'></span>&nbsp;&nbsp;"+json.zanshu);
 					}
 				}
 				
@@ -95,9 +98,16 @@ function index(){
 						}else{
 							micro.find('a[name="shoucang"]').html("<span class='glyphicon glyphicon-star-empty'></span>&nbsp;&nbsp;"+json.cangshu);
 						}
+					}else{
+						micro.find('a[name="shoucang"]').html("<span class='glyphicon glyphicon-star-empty'></span>&nbsp;&nbsp;"+json.cangshu);
 					}
 				}
-				micro.find("input").val(json.microid);
+				if(json.plshu==0){
+					
+				}else{
+					micro.find('a[name="pinglun"]').html("<span class='glyphicon glyphicon-sound-stereo'></span>&nbsp;&nbsp;"+json.plshu);
+				}
+				micro.find('input[name="microid"]').val(json.microid);
 				micro.find("img").attr("src",json.filepath);
 				micro.css({
 					"position":"relative",
@@ -139,18 +149,19 @@ function self(){
 				var micro = $("#moban").clone();
 				micro.find('a[name="name_"]').html("<span class='glyphicon glyphicon-user'></span>"+json.name);
 				if(json.authorname!=undefined){
-					micro.find("h6").html("转发微博");
-					micro.find("p").html(json.authorname+":"+json.microdata);
+					micro.find("h6").html(json.fbdate+"转发微博");
+					micro.find('p[name="microdata"]').html(json.authorname+":"+json.microdata);
 				}else{
-					micro.find("p").html(json.microdata);
+					micro.find("h6").html(json.fbdate+"来自 安安微博");
+					micro.find('p[name="microdata"]').html(json.microdata);
 				}
 				if(json.zanshu==undefined||json.zanshu==0){
 				}else{
-					var ttt = false;
+					var flag = false;
 					if(json.dianzanid!=undefined){
 						for(var i in json.dianzanid){
 							if(json.dianzanid[i]==json.microid){
-								ttt = true;
+								flag = true;
 							}
 						}
 						if(flag){
@@ -158,9 +169,15 @@ function self(){
 						}else{
 							micro.find('a[name="dianzan"]').html("<span class='glyphicon glyphicon-thumbs-up'></span>&nbsp;&nbsp;"+json.zanshu);
 						}
+					}else{
+						micro.find('a[name="dianzan"]').html("<span class='glyphicon glyphicon-thumbs-up'></span>&nbsp;&nbsp;"+json.zanshu);
 					}
 				}
-				
+                if(json.plshu==0){
+					
+				}else{
+					micro.find('a[name="pinglun"]').html("<span class='glyphicon glyphicon-sound-stereo'></span>&nbsp;&nbsp;"+json.plshu);
+				}
 				if(json.cangshu==undefined||json.cangshu==0){
 				}else{
 					var ttt = false;
@@ -175,9 +192,11 @@ function self(){
 						}else{
 							micro.find('a[name="shoucang"]').html("<span class='glyphicon glyphicon-star-empty'></span>&nbsp;&nbsp;"+json.cangshu);
 						}
+					}else{
+						micro.find('a[name="shoucang"]').html("<span class='glyphicon glyphicon-star-empty'></span>&nbsp;&nbsp;"+json.cangshu);
 					}
 				}
-				micro.find("input").val(json.microid);
+				micro.find('input[name="microid"]').val(json.microid);
 				micro.find("img").attr("src",json.filepath);
 				micro.css({
 					"position":"relative",
@@ -211,10 +230,11 @@ function image(){
 				var micro = $("#moban").clone();
 				micro.find('a[name="name_"]').html("<span class='glyphicon glyphicon-user'></span>"+json.name);
 				if(json.authorname!=undefined){
-					micro.find("h6").html("转发微博");
-					micro.find("p").html(json.authorname+":"+json.microdata);
+					micro.find("h6").html(json.fbdate+"转发微博");
+					micro.find('p[name="microdata"]').html(json.authorname+":"+json.microdata);
 				}else{
-					micro.find("p").html(json.microdata);
+					micro.find("h6").html(json.fbdate+"来自 安安微博");
+					micro.find('p[name="microdata"]').html(json.microdata);
 				}
 				if(json.zanshu==undefined||json.zanshu==0){
 				}else{
@@ -230,7 +250,13 @@ function image(){
 						}else{
 							micro.find('a[name="dianzan"]').html("<span class='glyphicon glyphicon-thumbs-up'></span>&nbsp;&nbsp;"+json.zanshu);
 						}
+					}else{
+						micro.find('a[name="dianzan"]').html("<span class='glyphicon glyphicon-thumbs-up'></span>&nbsp;&nbsp;"+json.zanshu);
 					}
+				}
+                if(json.plshu==0){	
+				}else{
+					micro.find('a[name="pinglun"]').html("<span class='glyphicon glyphicon-sound-stereo'></span>&nbsp;&nbsp;"+json.plshu);
 				}
 				
 				if(json.cangshu==undefined||json.cangshu==0){
@@ -247,9 +273,11 @@ function image(){
 						}else{
 							micro.find('a[name="shoucang"]').html("<span class='glyphicon glyphicon-star-empty'></span>&nbsp;&nbsp;"+json.cangshu);
 						}
+					}else{
+						micro.find('a[name="shoucang"]').html("<span class='glyphicon glyphicon-star-empty'></span>&nbsp;&nbsp;"+json.cangshu);
 					}
 				}
-				micro.find("input").val(json.microid);
+				micro.find('input[name="microid"]').val(json.microid);
 				micro.find("img").attr("src",json.filepath);
 				micro.css({
 					"position":"relative",
@@ -299,6 +327,102 @@ function dianZan(infoss){
 			}else{
 				alert(param.msg);
 				window.location.href="/ssm/user/login.action?username="+param.username+"&password="+param.password+"&fenlei="+$("#fenlei").val();
+			}
+		}
+	});
+}
+
+function pingLun(infoss){
+	var micro = $(infoss).parent();
+	micro.find('div[name="pldiv"]').css({
+		"display":"block",
+	});
+	var microid = micro.find('input[name=microid]').val();
+	micro.find('div[name="pls"]').empty();
+	$.ajax({
+		url:"/ssm/main/pingLun.action",
+		data:"microid="+microid,
+		dataType:"json",
+		success:function(param){
+			for(var i in param){
+				var json = param[i];
+				var pl = $("#plmoban").clone();
+				if(json.flag){
+					pl.find('a[name="user_"]').html(json.name+"：");
+				}else {
+					pl.find('a[name="user_"]').html(json.name);
+					pl.find('p[name="hfppp"]').css({
+						"display":"block",
+					});
+					pl.find('a[name="user_2"]').html("@"+json.name_+":");
+					pl.find('a[name="user_2"]').css({
+						"display":"block",
+					});
+				}
+				pl.find('input[name="plid"]').val(json.plid);
+				pl.find('p[name="plinfo"]').html(json.pldata);
+				pl.find('input[name="microid"]').val(microid);
+				pl.css({
+					"display":"block",
+				});
+				micro.find('div[name="pls"]').append(pl);
+			}
+		}
+	});
+}
+
+function huifu(infoss){
+	var pinglun = $(infoss).parent();
+	pinglun.find('div[name="pldiv_"]').css({
+		"display":"block",
+	});
+}
+
+
+function fbpl_(infoss){
+	var ttt = $(infoss).parents();
+	var pldiv_ = $(ttt[0]);
+	var pl_ = $(ttt[2]);
+	var micro = $(ttt[5]);
+	if(pldiv_.find('input[name="pldata_"]').val()==""){
+		alert("评论内容为空");
+		return;
+	}
+	var microid = micro.find('input[name="microid"]').val();
+	var plid_ = pl_.find('input[name="plid"]').val();
+	$.ajax({
+		url:"/ssm/main/fbpl.action",
+		data:"userid="+$("#userid").val()+"&microid="+microid+"&pldata="
+		+pldiv_.find('input[name="pldata_"]').val()+"&plid_="+plid_,
+		dataType:"json",
+		success:function(param){
+			if(param.flag){
+				alert("评论成功");
+				window.location.href="/ssm/user/login.action?username="+$("#username").val()+"&password="+$("#password").val()+"&fenlei="+$("#fenlei").val();
+			}else{
+				alert("评论失败");
+			}
+		}
+	});
+}
+
+function fbpl(infoss){
+	var pldiv = $(infoss).parent();
+	var micro = $(pldiv).parent();
+	if(pldiv.find('input[name="pldata"]').val()==""){
+		alert("评论内容为空");
+		return;
+	}
+	$.ajax({
+		url:"/ssm/main/fbpl.action",
+		data:"userid="+$("#userid").val()+"&microid="+micro.find('input[name="microid"]').val()+"&pldata="+pldiv.find('input[name="pldata"]').val(),
+		dataType:"json",
+		success:function(param){
+			if(param.flag){
+				alert("评论成功");
+				window.location.href="/ssm/user/login.action?username="+$("#username").val()+"&password="+$("#password").val()+"&fenlei="+$("#fenlei").val();
+			}else{
+				alert("评论失败");
 			}
 		}
 	});
